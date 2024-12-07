@@ -1,0 +1,25 @@
+[versions]
+kotlin = "2.1.0"
+ktor = "3.0.2"
+korlibs = "6.0.0"
+exposed = "0.56.0"
+h2 = "2.3.232"
+postgres = "42.7.4"
+logback = "1.4.14"
+shadow = "8.3.5"
+
+[libraries]
+ktor-core = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
+ktor-netty = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "ktor" }
+korlibs-compression = { module = "com.soywiz:korlibs-compression", version.ref = "korlibs" }
+korlibs-crypto = { module = "com.soywiz:korlibs-crypto", version.ref = "korlibs" }
+exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
+exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }
+h2 = { module = "com.h2database:h2", version.ref = "h2" }
+postgres = { module = "org.postgresql:postgresql", version.ref = "postgres" }
+logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+
+[plugins]
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
