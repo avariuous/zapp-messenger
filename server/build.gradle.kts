@@ -5,11 +5,10 @@ plugins {
 application.mainClass = "ru.sliva.zapp.server.Server"
 
 dependencies {
+    implementation(project(":data"))
+
     implementation(libs.ktor.core)
     implementation(libs.ktor.netty)
-
-    implementation(libs.korlibs.compression)
-    implementation(libs.korlibs.crypto)
 
     implementation(libs.exposed.core)
     implementation(libs.exposed.jdbc)

@@ -7,10 +7,20 @@ import korlibs.crypto.AES
 import korlibs.crypto.CipherPadding
 import korlibs.crypto.SecureRandom
 import korlibs.crypto.sha512
+import korlibs.encoding.base64
 import korlibs.io.compression.compress
 import korlibs.io.compression.deflate.GZIP
+import korlibs.io.compression.uncompress
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import ru.sliva.zapp.data.Entity
+import ru.sliva.zapp.data.UserProperties
+import ru.sliva.zapp.data.UserType
+import ru.sliva.zapp.data.utils.RSA
+import ru.sliva.zapp.data.utils.RSA.decrypt
+import ru.sliva.zapp.data.utils.RSA.encrypt
 import java.security.KeyPairGenerator
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
@@ -23,10 +33,26 @@ object Server {
 
     @JvmStatic
     fun main(args: Array<String>) = runBlocking {
+        val user = Entity(
+            1,
+            UserType.USER,
+            "Sliva",
+            "sliva",
+            "Sliva is a cool guy",
+            UserProperties(0)
+        )
+
+        var bytes = Json.encodeToString(user).encodeToByteArray()
+
+        bytes = bytes.compress(GZIP)
+        bytes = bytes.uncompress(GZIP)
+
+        println(Json.decodeFromString<Entity>(bytes.decodeToString()))
+
         val bytearr = SecureRandom.nextBytes(10)
 
         println(bytearr.encodeBase64())
-        println(bytearr.compress(GZIP).encodeBase64())
+        println(bytearr.compress(GZIP).base64)
         println(bytearr.sha512().base64)
 
         val original = "Hello, world!".encodeToByteArray()
@@ -40,30 +66,18 @@ object Server {
 
         println(decrypted.decodeToString())
 
-        val generator = KeyPairGenerator.getInstance("RSA").apply {
-            initialize(2048)
-        }
+        val keypair = RSA.generateKeyPair()
 
-        val keypair = generator.generateKeyPair()
-
-        val public = keypair.public as RSAPublicKey
-        val private = keypair.private as RSAPrivateKey
-
-        val encryptCipher = Cipher.getInstance("RSA").apply {
-            init(Cipher.ENCRYPT_MODE, public)
-        }
+        val public = keypair.public
+        val private = keypair.private
 
         // Шифрование публичным ключем
-        val rsa_public = encryptCipher.doFinal(original)
+        val rsa_public = public.encrypt(original)
 
         println(rsa_public.encodeBase64())
 
-        val decryptCipher = Cipher.getInstance("RSA").apply {
-            init(Cipher.DECRYPT_MODE, private)
-        }
-
         // Расшифровка приватным ключем
-        val rsa_private = decryptCipher.doFinal(rsa_public)
+        val rsa_private = private.decrypt(rsa_public)
 
         println(rsa_private.decodeToString())
 

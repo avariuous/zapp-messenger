@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.kotlin)
     alias(libs.plugins.shadow) apply false
+    alias(libs.plugins.kotlinx.serialization) apply false
 }
 
 tasks.jar { enabled = false }
@@ -21,6 +22,7 @@ subprojects {
 
     applyPlugins(
         libs.plugins.kotlin,
+        libs.plugins.kotlinx.serialization,
         libs.plugins.shadow
     )
 

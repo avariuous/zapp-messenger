@@ -1,5 +1,6 @@
 [versions]
 kotlin = "2.1.0"
+kotlinx-serialization = "1.7.3"
 ktor = "3.0.2"
 korlibs = "6.0.0"
 exposed = "0.56.0"
@@ -9,6 +10,7 @@ logback = "1.4.14"
 shadow = "8.3.5"
 
 [libraries]
+kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 ktor-core = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
 ktor-netty = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "ktor" }
 korlibs-compression = { module = "com.soywiz:korlibs-compression", version.ref = "korlibs" }
@@ -22,4 +24,5 @@ logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 [plugins]
 shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ktor = { id = "io.ktor.plugin", version.ref = "ktor" }

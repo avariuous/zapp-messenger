@@ -1,3 +1,4 @@
 rootProject.name = "zapp-messenger"
 
-include("server")
+include(":data")
+include(":server")
