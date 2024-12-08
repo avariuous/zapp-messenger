@@ -16,15 +16,10 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import ru.sliva.zapp.data.Entity
-import ru.sliva.zapp.data.UserProperties
-import ru.sliva.zapp.data.UserType
+import ru.sliva.zapp.data.User
 import ru.sliva.zapp.data.utils.RSA
 import ru.sliva.zapp.data.utils.RSA.decrypt
 import ru.sliva.zapp.data.utils.RSA.encrypt
-import java.security.KeyPairGenerator
-import java.security.interfaces.RSAPrivateKey
-import java.security.interfaces.RSAPublicKey
-import javax.crypto.Cipher
 
 object Server {
 
@@ -33,13 +28,12 @@ object Server {
 
     @JvmStatic
     fun main(args: Array<String>) = runBlocking {
-        val user = Entity(
+        val user = User(
             1,
-            UserType.USER,
             "Sliva",
             "sliva",
             "Sliva is a cool guy",
-            UserProperties(0)
+            0,
         )
 
         var bytes = Json.encodeToString(user).encodeToByteArray()
@@ -47,7 +41,7 @@ object Server {
         bytes = bytes.compress(GZIP)
         bytes = bytes.uncompress(GZIP)
 
-        println(Json.decodeFromString<Entity>(bytes.decodeToString()))
+        println(Json.decodeFromString<User>(bytes.decodeToString()))
 
         val bytearr = SecureRandom.nextBytes(10)
 

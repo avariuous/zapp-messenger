@@ -4,6 +4,15 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+enum class UserType {
+    @SerialName("user")
+    USER,
+
+    @SerialName("bot")
+    BOT
+}
+
+@Serializable
 sealed interface Credentials
 
 @Serializable
