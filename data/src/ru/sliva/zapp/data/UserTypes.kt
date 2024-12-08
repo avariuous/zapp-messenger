@@ -4,29 +4,35 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Entity(
-    val id: Int,
-    val type: UserType,
-    val name: String,
-    val username: String?,
-    val description: String?,
-    val properties: Properties
-)
-
-@Serializable
-sealed interface Properties
+abstract class Entity {
+    abstract val id: Int
+    abstract val type: UserType
+    abstract val name: String
+    abstract val username: String?
+    abstract val description: String?
+}
 
 @Serializable
 @SerialName("user")
-data class UserProperties(
+data class User(
+    override val id: Int,
+    override val type: UserType,
+    override val name: String,
+    override val username: String?,
+    override val description: String?,
     val lastSeen: Long?
-) : Properties
+) : Entity()
 
 @Serializable
 @SerialName("bot")
-data class BotProperties(
+data class Bot(
+    override val id: Int,
+    override val type: UserType,
+    override val name: String,
+    override val username: String?,
+    override val description: String?,
     val commands: List<String>
-) : Properties
+) : Entity()
 
 @Serializable
 enum class UserType(val id: Byte) {
