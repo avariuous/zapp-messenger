@@ -33,7 +33,5 @@ enum class UserType(val id: Byte) {
     @SerialName("user")
     USER(0x00),
     @SerialName("bot")
-    BOT(0x01),
-    @SerialName("admin")
-    ADMIN(0x02)
+    BOT(0x01)
 }
