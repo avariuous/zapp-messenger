@@ -3,6 +3,7 @@ package ru.sliva.zapp.server
 import io.ktor.network.selector.*
 import io.ktor.network.sockets.*
 import io.ktor.util.*
+import io.ktor.utils.io.core.*
 import korlibs.crypto.AES
 import korlibs.crypto.CipherPadding
 import korlibs.crypto.SecureRandom
@@ -13,6 +14,8 @@ import korlibs.io.compression.deflate.GZIP
 import korlibs.io.compression.uncompress
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import kotlinx.io.Buffer
+import kotlinx.io.readString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import ru.sliva.zapp.data.Entity
@@ -20,6 +23,7 @@ import ru.sliva.zapp.data.User
 import ru.sliva.zapp.data.utils.RSA
 import ru.sliva.zapp.data.utils.RSA.decrypt
 import ru.sliva.zapp.data.utils.RSA.encrypt
+import ru.sliva.zapp.data.utils.writeString
 
 object Server {
 
@@ -40,6 +44,18 @@ object Server {
 
         bytes = bytes.compress(GZIP)
         bytes = bytes.uncompress(GZIP)
+
+        val buffer = Buffer()
+
+        buffer.writeString("Hello, world!")
+
+        val bytes2 = buffer.readBytes().compress(GZIP)
+
+        val buffer2 = Buffer()
+
+        buffer2.write(bytes2.uncompress(GZIP))
+
+        println(buffer2.readString())
 
         println(Json.decodeFromString<User>(bytes.decodeToString()))
 
@@ -64,6 +80,8 @@ object Server {
 
         val public = keypair.public
         val private = keypair.private
+
+        println("Длина публичного ключа ${public.encoded.size}")
 
         // Шифрование публичным ключем
         val rsa_public = public.encrypt(original)

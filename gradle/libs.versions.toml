@@ -1,6 +1,7 @@
 [versions]
 kotlin = "2.1.0"
 kotlinx-serialization = "1.7.3"
+kotlinx-io = "0.6.0"
 ktor = "3.0.2"
 korlibs = "6.0.0"
 exposed = "0.56.0"
@@ -11,6 +12,7 @@ shadow = "8.3.5"
 
 [libraries]
 kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+kotlinx-io = { module = "org.jetbrains.kotlinx:kotlinx-io-core", version.ref = "kotlinx-io" }
 ktor-core = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
 ktor-netty = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "ktor" }
 korlibs-compression = { module = "com.soywiz:korlibs-compression", version.ref = "korlibs" }

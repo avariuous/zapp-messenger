@@ -4,12 +4,16 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-enum class UserType {
+enum class UserType(val id: Byte) {
     @SerialName("user")
-    USER,
+    USER(0x00),
 
     @SerialName("bot")
-    BOT
+    BOT(0x01);
+
+    companion object {
+        fun Byte.toUserType() = entries.firstOrNull { it.id == this }
+    }
 }
 
 @Serializable
