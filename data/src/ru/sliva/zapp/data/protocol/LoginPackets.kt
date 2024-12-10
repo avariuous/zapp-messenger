@@ -1,24 +1,23 @@
 package ru.sliva.zapp.data.protocol
 
+import korlibs.crypto.SecureRandom
 import korlibs.encoding.base64
 import korlibs.encoding.fromBase64
 import kotlinx.io.Buffer
 import kotlinx.io.readByteArray
-import ru.sliva.zapp.data.BotCredentials
-import ru.sliva.zapp.data.Credentials
-import ru.sliva.zapp.data.UserCredentials
-import ru.sliva.zapp.data.UserType
+import ru.sliva.zapp.data.*
 import ru.sliva.zapp.data.UserType.Companion.toUserType
+import ru.sliva.zapp.data.utils.*
 import ru.sliva.zapp.data.utils.RSA.toPublicKey
-import ru.sliva.zapp.data.utils.readString
-import ru.sliva.zapp.data.utils.writeString
 import java.security.PublicKey
 
 // Serverbound packets
 
 data class HandshakeC2S (
     var rsaKey: PublicKey
-) : Packet {
+) : ServerBoundPacket {
+
+    constructor() : this(RSA.generateKeyPair().public)
 
     override val packetId: Byte = 0x00
 
@@ -34,7 +33,9 @@ data class HandshakeC2S (
 data class LoginC2S (
     var userType: UserType,
     var credentials: Credentials
-) : Packet {
+) : ServerBoundPacket {
+
+    constructor() : this(UserType.USER, UserCredentials("login", "password"))
 
     override val packetId: Byte = 0x01
 
@@ -65,7 +66,9 @@ data class LoginC2S (
 // Clientbound packets
 data class HandshakeS2C (
     var aesKey: String
-) : Packet {
+) : ClientBoundPacket {
+
+    constructor() : this(SecureRandom.nextBytes(32).base64)
 
     override val packetId: Byte = 0x00
 
@@ -75,5 +78,22 @@ data class HandshakeS2C (
 
     override fun read(buffer: Buffer) {
         aesKey = buffer.readByteArray(32).base64
+    }
+}
+
+data class SuccessLogin(
+    var entity: Entity
+) : ClientBoundPacket {
+
+    constructor() : this(User(1, "Test", "test", "Bio", 0))
+
+    override val packetId: Byte = 0x01
+
+    override fun write(buffer: Buffer) {
+        buffer.write(entity)
+    }
+
+    override fun read(buffer: Buffer) {
+        buffer.read<Entity>()
     }
 }
